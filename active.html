@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="yes" name="apple-touch-fullscreen" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta name="format-detection" content="telephone=yes" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0">
+    <title>校园活动</title>
+<!--     <link rel="stylesheet" href="./css/index.css"> -->
+    <script src="/onion/Public/Api/Api_S/js/rem.js"></script>
+    <script src="/onion/Public/Api/Api_S/jquery/jquery-2.1.4.min.js"></script>
+    <style type="text/css">
+    *{margin: 0;padding: 0}
+    html {
+        width: 100%;
+        height: 100%;
+        font-family: 'Heiti SC', 'Microsoft YaHei';
+        font-size: 20px;
+    }
+
+    @media (min-width:740px) {
+        html {
+            font-size: 120px!important;
+        }
+    }
+    body {
+        height: 100%;
+        margin: 0;
+        background: #f7f7f7;
+    }
+    .container {
+        width: 100%;
+        min-width: 320px;
+        max-width: 640px;
+        font-size: 0.14rem;
+    }
+    .xyhd_img{
+        height: 1.8rem;
+        background: yellow;
+        margin-top: 0.1rem;
+        list-style: none;
+        background-size: cover!important;
+
+    }
+    .xyhd_img:nth-child(1){
+        margin-top: 0px;
+    }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <ul id="Container_xyhd">
+        </ul>
+    </div>
+</body>
+    <script src="./js/jquery.min.js"></script>
+<script>
+    $(function () {
+        var page=2;
+        show(1);
+        var allpage;
+        //这个是页面下滑加载事件
+        $(window).bind("scroll", function () {
+            var range = 8;
+            var totalheight = 0;
+            var srollTop = $(window).scrollTop();
+            totalheight = parseFloat($("body").height()) + parseFloat(srollTop);
+            if (($(document).height() - range) <= totalheight) {
+                show(page++);
+            }
+        })
+    })
+    // 在下面这个函数中ajax
+    function show(page) {
+        $.ajax({
+            url: "http://www.yctvc.com/onion/index.php/Api/Stu/roadshow?page="+page,
+            type: "POST",
+            success: function (data) {
+                var data1=JSON.parse(data)
+                if(data1.code==200){
+                    for(var i=0;i<data1.result.length;i++){
+                    var str='<li class="xyhd_img" data-href="'+data1.result[i].skip_url+'" style="background:url(http://www.yctvc.com/'+data1.result[i].img_path+') no-repeat;background-size:container"></li>';
+                    $("#Container_xyhd").append(str);
+                    
+                    }
+//                    $("#Container_xyhd li").on("click",function(){
+//                        var hr=$(this).attr("data-href");
+//                        window.location.href=hr;
+//                    })
+                }
+            }
+        });
+    }
+
+</script>
+</html>
